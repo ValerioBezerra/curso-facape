@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Controle Financeiro Pessoal</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="splash_text">Controle Financeiro Pessoal</string>
+
+    <string name="categorias">Categorias</string>
+    <string name="lancamentos">Lançamentos</string>
+    <string name="sair">Sair</string>
+    <string name="novo">Novo</string>
+</resources>
