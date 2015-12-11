@@ -24,6 +24,10 @@
             android:name=".activity.CategoriasActivity"
             android:label="@string/categorias" >
         </activity>
+        <activity
+            android:name=".activity.CadastroCategoriaActivity"
+            android:label="@string/cadastro_categoria" >
+        </activity>
     </application>
 
 </manifest>

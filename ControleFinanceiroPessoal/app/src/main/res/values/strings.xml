@@ -9,4 +9,11 @@
     <string name="lancamentos">Lançamentos</string>
     <string name="sair">Sair</string>
     <string name="novo">Novo</string>
+    <string name="descricao">Descrição</string>
+    <string name="receita">Receita</string>
+    <string name="despesa">Despesa</string>
+    <string name="salvar">Salvar</string>
+    <string name="cadastro_categoria">Cadastro Categoria</string>
+
+    <string name="title_activity_cadastro_categoria">CadastroCategoriaActivity</string>
 </resources>
