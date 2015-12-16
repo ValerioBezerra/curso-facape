@@ -2,22 +2,39 @@ package br.facape.controlefinanceiropessoal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 import java.util.List;
 
 import br.facape.controlefinanceiropessoal.R;
 import br.facape.controlefinanceiropessoal.adapter.CategoriaAdapter;
 import br.facape.controlefinanceiropessoal.bd.CategoriaBD;
 import br.facape.controlefinanceiropessoal.model.Categoria;
+import br.facape.controlefinanceiropessoal.webservice.CategoriaWebService;
 
 public class CategoriasActivity extends AppCompatActivity {
     private Button btnNovo;
     private ListView lvCategorias;
+
+    private List<Categoria> listaCategorias;
+    private Handler handlerCategoria;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +49,64 @@ public class CategoriasActivity extends AppCompatActivity {
         btnNovo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Categoria categoria = new Categoria();
+
+                Bundle extras = new Bundle();
+                extras.putSerializable("categoria", categoria);
+
                 Intent intent = new Intent(CategoriasActivity.this,
-                                           CadastroCategoriaActivity.class);
-                startActivity(intent);
+                        CadastroCategoriaActivity.class);
+                intent.putExtras(extras);
+                startActivityForResult(intent, 0);
             }
         });
 
-        listarCategorias();
+        lvCategorias.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Categoria categoria = listaCategorias.get(position);
+
+                Bundle extras = new Bundle();
+                extras.putSerializable("categoria", categoria);
+
+                Intent intent = new Intent(CategoriasActivity.this,
+                        CadastroCategoriaActivity.class);
+                intent.putExtras(extras);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        lvCategorias.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                CategoriaBD categoriaBD = new CategoriaBD(CategoriasActivity.this);
+                Categoria categoria = listaCategorias.get(position);
+                categoriaBD.excluir(categoria);
+                listarCategorias();
+
+                return true;
+            }
+        });
+
+        handlerCategoria = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                lvCategorias.setAdapter(new CategoriaAdapter(CategoriasActivity.this,
+                        listaCategorias));
+            }
+        };
+
+
+            //listarCategorias();
+        listarCategoriasWebService();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            listarCategorias();
+        }
     }
 
     @Override
@@ -51,9 +119,24 @@ public class CategoriasActivity extends AppCompatActivity {
 
     private void listarCategorias() {
         CategoriaBD categoriaBD = new CategoriaBD(CategoriasActivity.this);
-        List<Categoria> listaCategorias = categoriaBD.listarTodas();
+        listaCategorias = categoriaBD.listarTodas();
         lvCategorias.setAdapter(new CategoriaAdapter(CategoriasActivity.this,
-                                                     listaCategorias));
+                listaCategorias));
+    }
+
+    private void listarCategoriasWebService() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                CategoriaWebService categoriaWebService = new CategoriaWebService();
+                try {
+                    listaCategorias = categoriaWebService.listarCategorias();
+                    handlerCategoria.sendMessage(new Message());
+                } catch (Exception e) {
+                    Log.e("Erro", e.toString());
+                }
+            }
+        }).start();
     }
 
 }

@@ -3,4 +3,5 @@
     <color name="corPrimaria">#673ab7</color> <!-- 500 -->
     <color name="corPrimariaDark">#512da8</color> <!-- 700 -->
     <color name="cor50">#ede7f6</color>
+    <color name="corDestaque">#F50057</color> <!-- 700 -->
 </resources>

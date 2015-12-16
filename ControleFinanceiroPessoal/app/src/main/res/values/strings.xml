@@ -14,6 +14,7 @@
     <string name="despesa">Despesa</string>
     <string name="salvar">Salvar</string>
     <string name="cadastro_categoria">Cadastro Categoria</string>
-
-    <string name="title_activity_cadastro_categoria">CadastroCategoriaActivity</string>
+    <string name="observacao">Observação</string>
+    <string name="valor">Valor</string>
+    <string name="cadastro_lancamento">Cadastro Lançamento</string>
 </resources>

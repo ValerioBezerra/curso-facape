@@ -8,11 +8,14 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import br.facape.controlefinanceiropessoal.R;
+import br.facape.controlefinanceiropessoal.bd.CategoriaBD;
 import br.facape.controlefinanceiropessoal.model.Categoria;
 
 public class CadastroCategoriaActivity extends AppCompatActivity {
     private EditText edtDescricao;
     private RadioGroup rgTipo;
+
+    private Categoria categoria;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +25,17 @@ public class CadastroCategoriaActivity extends AppCompatActivity {
 
         edtDescricao = (EditText) findViewById(R.id.edtDescricao);
         rgTipo       = (RadioGroup) findViewById(R.id.rgTipo);
+
+        categoria = (Categoria) getIntent().getSerializableExtra("categoria");
+
+        if (categoria.getId() > 0) {
+            edtDescricao.setText(categoria.getDescricao());
+
+            if (categoria.getTipo().equals("R"))
+                rgTipo.check(R.id.rbReceita);
+            else
+                rgTipo.check(R.id.rbDespesa);
+        }
     }
 
     @Override
@@ -43,13 +57,19 @@ public class CadastroCategoriaActivity extends AppCompatActivity {
 
     private void salvar() {
         if (testarCampos()) {
-            Categoria categoria = new Categoria();
             categoria.setDescricao(edtDescricao.getText().toString());
 
             if (rgTipo.getCheckedRadioButtonId() == R.id.rbReceita)
                 categoria.setTipo("R");
             else
                 categoria.setTipo("D");
+
+            CategoriaBD categoriaBD = new CategoriaBD(CadastroCategoriaActivity.this);
+
+            if (categoria.getId() == 0)
+                categoriaBD.inserir(categoria);
+            else
+                categoriaBD.editar(categoria);
 
             finish();
         }

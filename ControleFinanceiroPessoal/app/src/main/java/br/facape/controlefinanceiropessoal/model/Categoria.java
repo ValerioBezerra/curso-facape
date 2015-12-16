@@ -1,9 +1,11 @@
 package br.facape.controlefinanceiropessoal.model;
 
+import java.io.Serializable;
+
 /**
  * Created by valerio on 09/12/15.
  */
-public class Categoria {
+public class Categoria implements Serializable {
     private int id;
     private String descricao;
     private String tipo;

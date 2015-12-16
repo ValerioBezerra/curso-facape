@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.facape.controlefinanceiropessoal" >
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -27,6 +29,14 @@
         <activity
             android:name=".activity.CadastroCategoriaActivity"
             android:label="@string/cadastro_categoria" >
+        </activity>
+        <activity
+            android:name=".activity.LancamentosActivity"
+            android:label="@string/lancamentos" >
+        </activity>
+        <activity
+            android:name=".activity.CadastroLancamentoActivity"
+            android:label="@string/cadastro_lancamento" >
         </activity>
     </application>
 

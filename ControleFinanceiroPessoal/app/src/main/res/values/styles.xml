@@ -9,6 +9,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/corPrimaria</item>
         <item name="colorPrimaryDark">@color/corPrimariaDark</item>
+        <item name="colorAccent">@color/corDestaque</item>
     </style>
 
 </resources>
