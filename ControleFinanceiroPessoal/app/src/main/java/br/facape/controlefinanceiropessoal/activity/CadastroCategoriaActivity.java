@@ -2,6 +2,7 @@ package br.facape.controlefinanceiropessoal.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -10,6 +11,7 @@ import android.widget.RadioGroup;
 import br.facape.controlefinanceiropessoal.R;
 import br.facape.controlefinanceiropessoal.bd.CategoriaBD;
 import br.facape.controlefinanceiropessoal.model.Categoria;
+import br.facape.controlefinanceiropessoal.webservice.CategoriaWebService;
 
 public class CadastroCategoriaActivity extends AppCompatActivity {
     private EditText edtDescricao;
@@ -64,14 +66,35 @@ public class CadastroCategoriaActivity extends AppCompatActivity {
             else
                 categoria.setTipo("D");
 
-            CategoriaBD categoriaBD = new CategoriaBD(CadastroCategoriaActivity.this);
+//            CategoriaBD categoriaBD = new CategoriaBD(CadastroCategoriaActivity.this);
+//
+//            if (categoria.getId() == 0)
+//                categoriaBD.inserir(categoria);
+//            else
+//                categoriaBD.editar(categoria);
+//
+//            finish();
 
-            if (categoria.getId() == 0)
-                categoriaBD.inserir(categoria);
-            else
-                categoriaBD.editar(categoria);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        CategoriaWebService categoriaWebService =
+                                new CategoriaWebService();
 
-            finish();
+                        if (categoria.getId() == 0)
+                            categoriaWebService.inserir(categoria);
+                        else
+                            categoriaWebService.editar(categoria);
+
+                        finish();
+                    } catch(Exception ex) {
+                        Log.i("Erro", ex.toString());
+                    }
+                }
+            }).start();
+
+
         }
     }
 

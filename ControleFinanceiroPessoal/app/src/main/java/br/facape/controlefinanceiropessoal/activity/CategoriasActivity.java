@@ -80,10 +80,24 @@ public class CategoriasActivity extends AppCompatActivity {
         lvCategorias.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                CategoriaBD categoriaBD = new CategoriaBD(CategoriasActivity.this);
-                Categoria categoria = listaCategorias.get(position);
-                categoriaBD.excluir(categoria);
-                listarCategorias();
+                final Categoria categoria = listaCategorias.get(position);
+//                CategoriaBD categoriaBD = new CategoriaBD(CategoriasActivity.this);
+//                categoriaBD.excluir(categoria);
+//                listarCategorias();
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            CategoriaWebService categoriaWebService =
+                                    new CategoriaWebService();
+                            categoriaWebService.excluir(categoria);
+                            listarCategoriasWebService();
+                        } catch (Exception ex) {
+                            Log.i("Erro", ex.toString());
+                        }
+                    }
+                }).start();
+
 
                 return true;
             }
@@ -105,7 +119,8 @@ public class CategoriasActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0) {
-            listarCategorias();
+            //listarCategorias();
+            listarCategoriasWebService();
         }
     }
 
